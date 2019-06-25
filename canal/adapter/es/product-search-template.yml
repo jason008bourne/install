@@ -1,0 +1,14 @@
+dataSourceKey: product-search-template
+destination: product-search-template
+groupId: g1
+esMapping:
+  _index: product_admin_search_1
+  _type: _doc
+  _id: product_no
+  upsert: true
+#  pk: id
+  sql: "SELECT id as pid,product_no,active as state,image_url as img_url,list_price,daily_testing_flag FROM product_template"
+  skips:
+    - product_no
+  etlCondition: "where id >= '{0}'"
+  commitBatch: 3000

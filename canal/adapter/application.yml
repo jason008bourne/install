@@ -1,0 +1,60 @@
+server:
+  port: 8081
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+
+canal.conf:
+  mode: tcp # kafka rocketMQ
+  #canalServerHost: 127.0.0.1:11111
+  zookeeperHosts: 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813
+#  mqServers: 127.0.0.1:9092 #or rocketmq
+#  flatMessage: true
+  batchSize: 500
+  syncBatchSize: 1000
+  retries: 0
+  timeout:
+  accessKey:
+  secretKey:
+  srcDataSources:
+    product-search-etlinfo:
+      url: jdbc:mysql://172.16.254.40:3306/etl_odoo_test?autoReconnect=true
+      username: root
+      password: root
+    product-search-template:
+      url: jdbc:mysql://172.16.254.41:3306/odoo_test?autoReconnect=true
+      username: root
+      password: root      
+  canalAdapters:
+  - instance: product-search-etlinfo
+    groups:
+    - groupId: g1
+      outerAdapters:
+      - name: es
+        hosts: es-cn-45914nu9x00081rsf.elasticsearch.aliyuncs.com:9200
+        properties:
+          accessId: xxx
+          accessKey: xxx
+#          cluster.name: docker-cluster
+          cluster.name: es-cn-45914nu9x00081rsf      
+  - instance: product-search-template
+    groups:
+    - groupId: g1
+      outerAdapters:
+      - name: es
+        hosts: es-cn-45914nu9x00081rsf.elasticsearch.aliyuncs.com:9200
+        properties:
+          accessId: xxx
+          accessKey: xxx
+#          cluster.name: docker-cluster
+          cluster.name: es-cn-45914nu9x00081rsf      
+
+#      - name: logger
+#      - name: hbase
+#        properties:
+#          hbase.zookeeper.quorum: 127.0.0.1
+#          hbase.zookeeper.property.clientPort: 2181
+#          zookeeper.znode.parent: /hbase
+
