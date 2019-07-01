@@ -1,18 +1,12 @@
 #!/bin/bash
 #部署步骤 1.修改jvm内存大小 2.修改docker安装y or n  3.bash执行，下面是例子
-#bash kafka.sh 1 172.16.254.29:21811,172.16.254.29:21812 172.16.179.61 9092
+#bash kafka.sh 172.16.254.29:21811,172.16.254.29:21812 1 1 a
 #第一个参数，brokerId
-#第二个参数,zookeeper集群连接地址
-#第三个参数,kafka监听的IP
-#第四个参数 kafka监听的端口
-#第五个参数 可以为任意值，也可以不传，如果不传则按照非认证模式部署，如果传了则用SASL认证
+#第二个参数,JVM内存大小
+#第三个参数,zookeeper集群连接地址
+#第四个参数 可以为任意值，也可以不传，如果不传则按照非认证模式部署，如果传了则用SASL认证
 
 
-brokerId=$1
-zkAddr=$2
-hostAddr=$3
-hostPort=$4
-sasl=$5
 KAFKA_VERSION=2.2.0
 SCALA_VERSION=2.12
 FILEPATH="kafka_${SCALA_VERSION}-${KAFKA_VERSION}"
@@ -23,10 +17,17 @@ DATA_DIR_NAME="kafka"
 DOCKER_DATA_PATH="${DOCKER_DATA_PATH_ROOT}/${DATA_DIR_NAME}"
 DATA_PATH="${DATA_PATH_ROOT}/${DATA_DIR_NAME}"
 
-JVM_MEMORY=1
-INSTALL_DOCKER="y"
+innerIp=`ip a | grep inet | grep -v inet6 | grep -v docker | grep -v 127 | sed 's/^[ \t]*//g' | cut -d ' ' -f2 | cut -d '/' -f1`
+
+zkAddr=$1
+brokerId=$2
+JVM_MEMORY=$3
+sasl=$4
+hostAddr="${innerIp}"
+hostPort=9092
 
 MON_PORT=9999
+INSTALL_DOCKER="y"
 JAVA_AGENT_PROM="-javaagent:${JAVA_CONFIG_ROOT}/jmx_prometheus_javaagent.jar=${MON_PORT}:${JAVA_CONFIG_ROOT}"
 KAFKA_OPTS="${JAVA_AGENT_PROM}/jmx-export-kafka.yaml"
 KAFKA_HEAP="-Xms$[JVM_MEMORY*1024]m -Xmx$[JVM_MEMORY*1024]m"
