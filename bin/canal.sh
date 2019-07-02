@@ -1,7 +1,9 @@
 #!/bin/bash
 #1.修改配置文件的mysql连接信息和用户名密码,默认取内网ip，端口21111,看是否需要调整,
-#2.canal部署,第一个参数 zk集群地址 第二个数字 jvm启动的内存 第三个参数kafka集群地址，可以不传，不传canal按照TCP方式运行
-#bash canal.sh 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813 1 172.16.254.29:9092
+#2.canal部署,第一个参数 zk集群地址 第二个数字 jvm启动的内存 第三个参数kafka集群地址，可以不传，不传canal按照TCP方式运行 第四个参数kafka user 第五个参数kafka password 
+#如果第四个参数开始都不传，表示kafka不需要认证，如果传了第四个（任意值）,不传第五个表示kafka开启了默认认证，但使用bob和bob-pwd这组默认账户密码（主要为了测试环境方便
+#，测试环境很多人都是设置这组官方默认密码），如果第四个和第五个参数都传了，就完整传入的账户密码
+#bash canal.sh 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813 1 172.16.254.29:9092 bob bob-pwd
 
 PROGRAM_VERSION="1.1.3"
 source ../common.sh
@@ -18,16 +20,19 @@ PROGRAM_PORT=21111
 ZK_ADDR=$1
 JVM_MEMORY=$2
 KAFKA_ADDR=$3
+KAFKA_USER=$4
+KAFKA_PASS=$5
 MON_PORT=11110
 JAVA_AGENT_PROM="-javaagent:${JAVA_CONFIG_ROOT}/jmx_prometheus_javaagent.jar=${MON_PORT}:${JAVA_CONFIG_ROOT}"
-#JVM_ARGS="-Xms$[JVM_MEMORY*1024]m -Xmx$[JVM_MEMORY*1024]m ${JAVA_AGENT_PROM}/jmx-export-common.yaml "
 JVM_ARGS="-Xms$[JVM_MEMORY*1024]m -Xmx$[JVM_MEMORY*1024]m "
+#JVM_ARGS="${JVM_ARGS} ${JAVA_AGENT_PROM}/jmx-export-common.yaml"
 
 if [ ! -d "${PROGRAM_DIR}" ]; then
    sudo mkdir -p "${PROGRAM_DIR}"
    #如果文件已经存在，解压
    if [ ! -f ~/${PROGRAM_FILE} ]; then
-   	  wget -c -P ~ ${DOWN_URL}
+   	  #wget -c -P ~ ${DOWN_URL}
+	  rclone copy -P hz-jump:hz-jump/${PROGRAM_FILE} ~
    fi
    sudo tar zxvf ~/${PROGRAM_FILE} -C ${PROGRAM_DIR}
 fi
@@ -64,7 +69,23 @@ else
     sudo sed -ri "s/^canal\.mq\.servers.*/canal\.mq\.servers=${KAFKA_ADDR}/" ../${PROGRAM_NAME}/canal.properties
 fi
 
-sudo cp ../${PROGRAM_NAME}/canal.properties ${PROGRAM_DIR}/conf/canal.properties
+if [ -z "${KAFKA_USER}" ]; then 
+    sudo cp ../${PROGRAM_NAME}/canal.properties ../${PROGRAM_NAME}/canal-kafka-no-pass.properties
+    sudo sed -ri "s/^canal\.mq\.properties\.sasl.*/#/" ../${PROGRAM_NAME}/canal-kafka-no-pass.properties
+    sudo sed -ri "s/^canal\.mq\.properties\.security\.protocol.*/#/" ../${PROGRAM_NAME}/canal-kafka-no-pass.properties
+    sudo cp ../${PROGRAM_NAME}/canal-kafka-no-pass.properties ${PROGRAM_DIR}/conf/canal.properties
+else    
+    if [ -z "${KAFKA_PASS}" ]; then 
+        sudo sed -ri "s/^canal\.mq\.properties\.sasl\.mechanism.*/canal\.mq\.properties\.sasl\.mechanism=PLAIN/" ../${PROGRAM_NAME}/canal.properties
+        sudo sed -ri "s/^canal\.mq\.properties\.sasl\.jaas\.config.*/canal\.mq\.properties\.sasl\.jaas\.config=org\.apache\.kafka\.common\.security\.plain\.PlainLoginModule required username\"bob\" password=\"bob-pwd\";/" ../${PROGRAM_NAME}/canal.properties
+        sudo sed -ri "s/^canal\.mq\.properties\.security\.protocol.*/canal\.mq\.properties\.security\.protocol=SASL_PLAINTEXT/" ../${PROGRAM_NAME}/canal.properties
+    else    
+        sudo sed -ri "s/^canal\.mq\.properties\.sasl\.mechanism.*/canal\.mq\.properties\.sasl\.mechanism=PLAIN/" ../${PROGRAM_NAME}/canal.properties
+        sudo sed -ri "s/^canal\.mq\.properties\.sasl\.jaas\.config.*/canal\.mq\.properties\.sasl\.jaas\.config=org\.apache\.kafka\.common\.security\.plain\.PlainLoginModule required username\"${KAFKA_USER}\" password=\"${KAFKA_PASS}\";/" ../${PROGRAM_NAME}/canal.properties
+        sudo sed -ri "s/^canal\.mq\.properties\.security\.protocol.*/canal\.mq\.properties\.security\.protocol=SASL_PLAINTEXT/" ../${PROGRAM_NAME}/canal.properties
+    fi
+    sudo cp ../${PROGRAM_NAME}/canal.properties ${PROGRAM_DIR}/conf/canal.properties
+fi
 sudo cp ../${PROGRAM_NAME}/startup.sh ${PROGRAM_DIR}/bin/startup.sh && sudo chmod 755 ${PROGRAM_DIR}/bin/startup.sh
 sudo cp ../${PROGRAM_NAME}/stop.sh ${PROGRAM_DIR}/bin/stop.sh && sudo chmod 755 ${PROGRAM_DIR}/bin/stop.sh
 sudo chown -R ${USER_WHO}:docker /home/${USER_WHO}/${INSTALL_ROOT}
