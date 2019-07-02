@@ -81,4 +81,4 @@ fi
 #kafka部署docker无法直接运行，不知原因，但会打印出命令行，复制docker命令行，再单独执行一次就可以- -！如果有个性化的配置改server-sasl.properties和server-plian.properties，不要直接改server.properties
 #部署步骤 1.修改jvm内存大小 2.修改docker安装y or n  3.bash执行，下面是例子
 #第一个参数，brokerId 第二个参数,zookeeper集群连接地址 第三个参数,kafka监听的IP 第四个参数 kafka监听的端口 第五个参数 可以为任意值，也可以不传，如果不传则按照非认证模式部署，如果传了则用SASL认证
-bash kafka.sh 1 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813 172.16.254.29 9092
+bash kafka.sh 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813 172.16.254.29 1 1 a

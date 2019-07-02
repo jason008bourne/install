@@ -77,11 +77,11 @@ if [ -z "${KAFKA_USER}" ]; then
 else    
     if [ -z "${KAFKA_PASS}" ]; then 
         sudo sed -ri "s/^canal\.mq\.properties\.sasl\.mechanism.*/canal\.mq\.properties\.sasl\.mechanism=PLAIN/" ../${PROGRAM_NAME}/canal.properties
-        sudo sed -ri "s/^canal\.mq\.properties\.sasl\.jaas\.config.*/canal\.mq\.properties\.sasl\.jaas\.config=org\.apache\.kafka\.common\.security\.plain\.PlainLoginModule required username\"bob\" password=\"bob-pwd\";/" ../${PROGRAM_NAME}/canal.properties
+        sudo sed -ri "s/^canal\.mq\.properties\.sasl\.jaas\.config.*/canal\.mq\.properties\.sasl\.jaas\.config=org\.apache\.kafka\.common\.security\.plain\.PlainLoginModule required username=\"bob\" password=\"bob-pwd\";/" ../${PROGRAM_NAME}/canal.properties
         sudo sed -ri "s/^canal\.mq\.properties\.security\.protocol.*/canal\.mq\.properties\.security\.protocol=SASL_PLAINTEXT/" ../${PROGRAM_NAME}/canal.properties
     else    
         sudo sed -ri "s/^canal\.mq\.properties\.sasl\.mechanism.*/canal\.mq\.properties\.sasl\.mechanism=PLAIN/" ../${PROGRAM_NAME}/canal.properties
-        sudo sed -ri "s/^canal\.mq\.properties\.sasl\.jaas\.config.*/canal\.mq\.properties\.sasl\.jaas\.config=org\.apache\.kafka\.common\.security\.plain\.PlainLoginModule required username\"${KAFKA_USER}\" password=\"${KAFKA_PASS}\";/" ../${PROGRAM_NAME}/canal.properties
+        sudo sed -ri "s/^canal\.mq\.properties\.sasl\.jaas\.config.*/canal\.mq\.properties\.sasl\.jaas\.config=org\.apache\.kafka\.common\.security\.plain\.PlainLoginModule required username=\"${KAFKA_USER}\" password=\"${KAFKA_PASS}\";/" ../${PROGRAM_NAME}/canal.properties
         sudo sed -ri "s/^canal\.mq\.properties\.security\.protocol.*/canal\.mq\.properties\.security\.protocol=SASL_PLAINTEXT/" ../${PROGRAM_NAME}/canal.properties
     fi
     sudo cp ../${PROGRAM_NAME}/canal.properties ${PROGRAM_DIR}/conf/canal.properties
