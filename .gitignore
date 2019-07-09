@@ -1,6 +1,39 @@
-# Created by http://www.gitignore.io
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.next
+release.properties
 
-#antx.properties
+logs/
+*.class
+*.bak
+*.log*
+
+### Common ###
+.DS_Store
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.factorypath
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
 ### Eclipse ###
 *.pydevproject
 .metadata
@@ -9,15 +42,12 @@ tmp/
 *.tmp
 *.bak
 *.swp
-*.sw*
 *~.nib
 local.properties
 .settings/
 .loadpath
 .project
 .classpath
-*.iml
-.idea/
 
 # External tool builders
 .externalToolBuilders/
@@ -39,8 +69,6 @@ local.properties
 .texlipse
 
 
-### Java ###
-*.class
 
 # Mobile Tools for Java ()J2ME)
 .mtj.tmp/
@@ -54,15 +82,7 @@ local.properties
 hs_err_pid*
 
 
-### Maven ###
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.next
-release.properties
-
 # run hsf related
 *.log
 *.log.*
-tree
 web-core/hsf.configuration/

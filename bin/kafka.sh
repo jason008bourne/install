@@ -1,10 +1,11 @@
 #!/bin/bash
-#部署步骤 1.修改jvm内存大小 2.修改docker安装y or n  3.bash执行，下面是例子
+#部署步骤 1.修改jvm内存大小 2.修改docker安装y or n  3.如果kafka开启了认证，看是否需要修改认证账户 4.bash执行，下面是例子
 #bash kafka.sh 172.16.254.29:21811,172.16.254.29:21812 1 1 a
 #第一个参数，brokerId
 #第二个参数,JVM内存大小
 #第三个参数,zookeeper集群连接地址
 #第四个参数 可以为任意值，也可以不传，如果不传则按照非认证模式部署，如果传了则用SASL认证
+#docker运行需要先运行命令行，然后docker rm -f kafka1,然后去掉KAFKA_OPTS和JXM_PORT这两个变量,大坑，原因不明
 
 
 KAFKA_VERSION=2.2.0

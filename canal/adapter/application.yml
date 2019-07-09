@@ -7,17 +7,16 @@ spring:
     default-property-inclusion: non_null
 
 canal.conf:
-  mode: tcp # kafka rocketMQ
+  mode: kafka # kafka rocketMQ tcp
+  mqServers: 127.0.0.1:9092 #or rocketmq
   #canalServerHost: 127.0.0.1:11111
+  #mode: tcp 
   zookeeperHosts: 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813
-#  mqServers: 127.0.0.1:9092 #or rocketmq
-#  flatMessage: true
-  batchSize: 500
+  flatMessage: true
+  batchSize: 50
   syncBatchSize: 1000
   retries: 0
   timeout:
-  accessKey:
-  secretKey:
   srcDataSources:
     product-search-etlinfo:
       url: jdbc:mysql://172.16.254.40:3306/etl_odoo_test?autoReconnect=true

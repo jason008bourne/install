@@ -6,20 +6,22 @@ cd ${PROGRAM_PATH}
 runModel=${1}
 
 if [[ -z "${runModel}" ]] || [[ "${runModel}" == "1" ]]; then 
-    bash canal-stop.sh
+    bash canal-clean.sh
     bash canal-adapter.sh 1
 fi
 
 if [[ "${runModel}" == "1" ]] || [[ "${runModel}" == "2" ]]; then 
-    bash canal-stop.sh 2
-    bash canal.sh 172.16.254.38 21111 1 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813
+    bash canal-clean.sh 2
+    bash canal.sh 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813 1 172.16.254.29:9092 bob bob-pwd
 fi
 
 
 #canal部署
-#1.修改配置文件的mysql连接信息和用户名密码
-#第一个参数绑定的本机ip  第二个参数canal的服务端口 第三个参数 数字 jvm启动的内存 第四个参数zk集群地址
-#bash canal.sh 172.16.254.38 21111 1 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813
+#1.修改配置文件的mysql连接信息和用户名密码,canal默认取内网ip，端口21111,看是否需要调整,
+#2.canal部署,第一个参数 zk集群地址 第二个数字 jvm启动的内存 第三个参数kafka集群地址，可以不传，不传canal按照TCP方式运行 第四个参数kafka user 第五个参数kafka password 
+#如果第四个参数开始都不传，表示kafka不需要认证，如果传了第四个（任意值）,不传第五个表示kafka开启了默认认证，但使用bob和bob-pwd这组默认账户密码（主要为了测试环境方便
+#，测试环境很多人都是设置这组官方默认密码），如果第四个和第五个参数都传了，就完整传入的账户密码
+#bash canal.sh 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813 1 172.16.254.29:9092 bob bob-pwd
 
 
 
@@ -78,7 +80,11 @@ fi
 
 
 
-#kafka部署docker无法直接运行，不知原因，但会打印出命令行，复制docker命令行，再单独执行一次就可以- -！如果有个性化的配置改server-sasl.properties和server-plian.properties，不要直接改server.properties
-#部署步骤 1.修改jvm内存大小 2.修改docker安装y or n  3.bash执行，下面是例子
-#第一个参数，brokerId 第二个参数,zookeeper集群连接地址 第三个参数,kafka监听的IP 第四个参数 kafka监听的端口 第五个参数 可以为任意值，也可以不传，如果不传则按照非认证模式部署，如果传了则用SASL认证
-bash kafka.sh 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813 172.16.254.29 1 1 a
+#部署步骤 1.修改jvm内存大小 2.修改docker安装y or n  3.如果kafka开启了认证，看是否需要修改认证账户 4.bash执行，下面是例子
+#bash kafka.sh 172.16.254.29:21811,172.16.254.29:21812 1 1 a
+#第一个参数，brokerId
+#第二个参数,JVM内存大小
+#第三个参数,zookeeper集群连接地址
+#第四个参数 可以为任意值，也可以不传，如果不传则按照非认证模式部署，如果传了则用SASL认证
+#docker运行需要先运行命令行，然后docker rm -f kafka1,然后去掉KAFKA_OPTS和JXM_PORT这两个变量,大坑，原因不明
+#bash kafka.sh 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813 172.16.254.29 1 1 a
