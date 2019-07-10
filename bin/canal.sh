@@ -89,7 +89,7 @@ fi
 sudo cp ../${PROGRAM_NAME}/startup.sh ${PROGRAM_DIR}/bin/startup.sh && sudo chmod 755 ${PROGRAM_DIR}/bin/startup.sh
 sudo cp ../${PROGRAM_NAME}/stop.sh ${PROGRAM_DIR}/bin/stop.sh && sudo chmod 755 ${PROGRAM_DIR}/bin/stop.sh
 sudo chown -R ${USER_WHO} /home/${USER_WHO}/${INSTALL_ROOT}
-sudo -u ${USER_WHO} "PATH=${PATH}" "JAVA_OPTS=${JVM_ARGS}" bash ${PROGRAM_DIR}/bin/startup.sh
+sudo -u ${USER_WHO} "PATH=${PATH}" "JAVA_OPTS=${JVM_ARGS}" bash ${PROGRAM_DIR}/bin/startup.sh debug 5005
 
 
 
