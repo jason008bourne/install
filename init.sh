@@ -1,8 +1,6 @@
-USER_WHO="ubuntu"
-INSTALL_ROOT="initstart"
-PROGRAM_PATH="/home/${USER_WHO}/${INSTALL_ROOT}/install/bin"
-cd ${PROGRAM_PATH}
-
+SHELL_FOLDER=$(dirname $(readlink -f "$0"))
+echo "${SHELL_FOLDER}"
+cd ${SHELL_FOLDER}/bin
 runModel=${1}
 
 if [[ -z "${runModel}" ]] || [[ "${runModel}" == "1" ]]; then 
