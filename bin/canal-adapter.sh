@@ -33,7 +33,7 @@ sudo cp ../${PROGRAM_NAME}/adapter/es/* ${PROGRAM_DIR}/conf/es
 sudo cp ../${PROGRAM_NAME}/adapter/application.yml ${PROGRAM_DIR}/conf/application.yml
 sudo cp ../${PROGRAM_NAME}/adapter/startup.sh ${PROGRAM_DIR}/bin/startup.sh && sudo chmod 755 ${PROGRAM_DIR}/bin/startup.sh
 sudo cp ../${PROGRAM_NAME}/adapter/stop.sh ${PROGRAM_DIR}/bin/stop.sh && sudo chmod 755 ${PROGRAM_DIR}/bin/stop.sh
-sudo chown -R ${USER_WHO}:docker /home/${USER_WHO}/${INSTALL_ROOT}
+sudo chown -R ${USER_WHO} /home/${USER_WHO}/${INSTALL_ROOT}
 sudo -u ${USER_WHO} "PATH=${PATH}" "JAVA_OPTS=${JVM_ARGS}" bash ${PROGRAM_DIR}/bin/startup.sh
 
 

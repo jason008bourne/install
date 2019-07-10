@@ -23,7 +23,6 @@ if [[ -z "${runModel}" ]] || [[ "${runModel}" == "1" ]]; then
        sudo tar zxvf ~/${PROGRAM_FILE} -C ${PROGRAM_DIR}
     fi
     sudo cp ../${PROGRAM_NAME}/adapter/stop.sh ${PROGRAM_DIR}/bin/stop.sh && sudo chmod 755 ${PROGRAM_DIR}/bin/stop.sh
-    sudo chown admin:docker ../../client-adapter.elasticsearch-1.1.3-jar-with-dependencies.jar && sudo chmod 777 ../../client-adapter.elasticsearch-1.1.3-jar-with-dependencies.jar && sudo cp ../../client-adapter.elasticsearch-1.1.3-jar-with-dependencies.jar ${PROGRAM_DIR}/plugin
 fi
 
 if [[ "${runModel}" == "1" ]] || [[ "${runModel}" == "2" ]]; then 

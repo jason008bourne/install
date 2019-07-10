@@ -8,7 +8,7 @@ spring:
 
 canal.conf:
   mode: kafka # kafka rocketMQ tcp
-  mqServers: 127.0.0.1:9092 #or rocketmq
+  mqServers: 172.16.254.29:9092 #or rocketmq
   #canalServerHost: 127.0.0.1:11111
   #mode: tcp 
   zookeeperHosts: 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813
@@ -17,13 +17,22 @@ canal.conf:
   syncBatchSize: 1000
   retries: 0
   timeout:
+  accessKey: 
+  secretKey: 
+  kafka:
+    security:
+      protocol: SASL_PLAINTEXT
+    sasl:
+      mechanism: PLAIN
+      jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule required username="bob" password="bob-pwd"
   srcDataSources:
     product-search-etlinfo:
-      url: jdbc:mysql://172.16.254.40:3306/etl_odoo_test?autoReconnect=true
+      url: jdbc:mysql://172.16.254.40:3306/etl_odoo?autoReconnect=true
       username: root
       password: root
     product-search-template:
-      url: jdbc:mysql://172.16.254.41:3306/odoo_test?autoReconnect=true
+      url: jdbc:mysql://172.16.254.41:3306/odoo?autoReconnect=true
       username: root
       password: root      
   canalAdapters:
@@ -32,23 +41,21 @@ canal.conf:
     - groupId: g1
       outerAdapters:
       - name: es
-        hosts: es-cn-45914nu9x00081rsf.elasticsearch.aliyuncs.com:9200
+        hosts: 172.16.254.29:8200
         properties:
           accessId: xxx
           accessKey: xxx
-#          cluster.name: docker-cluster
-          cluster.name: es-cn-45914nu9x00081rsf      
+          cluster.name: docker-cluster
   - instance: product-search-template
     groups:
     - groupId: g1
       outerAdapters:
       - name: es
-        hosts: es-cn-45914nu9x00081rsf.elasticsearch.aliyuncs.com:9200
+        hosts: 172.16.254.29:8200
         properties:
           accessId: xxx
           accessKey: xxx
-#          cluster.name: docker-cluster
-          cluster.name: es-cn-45914nu9x00081rsf      
+          cluster.name: docker-cluster
 
 #      - name: logger
 #      - name: hbase
