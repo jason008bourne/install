@@ -36,7 +36,7 @@ canal.conf:
       username: root
       password: root      
   canalAdapters:
-  - instance: etl_odoo
+  - instance: etl_odoo_etl_product_info
     groups:
     - groupId: g1
       outerAdapters:
@@ -46,7 +46,7 @@ canal.conf:
           accessId: xxx
           accessKey: xxx
           cluster.name: docker-cluster
-  - instance: odoo
+  - instance: odoo_product_template
     groups:
     - groupId: g1
       outerAdapters:

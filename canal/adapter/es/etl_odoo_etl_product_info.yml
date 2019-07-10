@@ -1,5 +1,5 @@
 dataSourceKey: etl_odoo
-destination: etl_odoo
+destination: etl_odoo_etl_product_info
 groupId: g1
 esMapping:
   _index: product_admin_search_1
