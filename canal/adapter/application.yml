@@ -27,16 +27,16 @@ canal.conf:
       jaas:
           config: org.apache.kafka.common.security.plain.PlainLoginModule required username="bob" password="bob-pwd"
   srcDataSources:
-    product-search-etlinfo:
+    etl_odoo:
       url: jdbc:mysql://172.16.254.40:3306/etl_odoo?autoReconnect=true
       username: root
       password: root
-    product-search-template:
+    odoo:
       url: jdbc:mysql://172.16.254.41:3306/odoo?autoReconnect=true
       username: root
       password: root      
   canalAdapters:
-  - instance: product-search-etlinfo
+  - instance: etl_odoo
     groups:
     - groupId: g1
       outerAdapters:
@@ -46,7 +46,7 @@ canal.conf:
           accessId: xxx
           accessKey: xxx
           cluster.name: docker-cluster
-  - instance: product-search-template
+  - instance: odoo
     groups:
     - groupId: g1
       outerAdapters:

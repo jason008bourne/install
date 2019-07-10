@@ -1,5 +1,5 @@
-dataSourceKey: product-search-template
-destination: product-search-template
+dataSourceKey: odoo
+destination: odoo
 groupId: g1
 esMapping:
   _index: product_admin_search_1
