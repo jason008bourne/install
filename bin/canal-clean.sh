@@ -18,7 +18,8 @@ if [[ -z "${runModel}" ]] || [[ "${runModel}" == "1" ]]; then
        sudo mkdir -p "${PROGRAM_DIR}"
        #如果文件已经存在，解压
        if [ ! -f ~/${PROGRAM_FILE} ]; then
-   	  wget -c -P ~ ${DOWN_URL}
+   	  #wget -c -P ~ ${DOWN_URL}
+	  rclone copy -P hz-jump:hz-jump/${PROGRAM_FILE} ~
        fi
        sudo tar zxvf ~/${PROGRAM_FILE} -C ${PROGRAM_DIR}
     fi
@@ -36,7 +37,8 @@ if [[ "${runModel}" == "1" ]] || [[ "${runModel}" == "2" ]]; then
        sudo mkdir -p "${PROGRAM_DIR}"
        #如果文件已经存在，解压
        if [ ! -f ~/${PROGRAM_FILE} ]; then
-   	  wget -c -P ~ ${DOWN_URL}
+   	  #wget -c -P ~ ${DOWN_URL}
+	  rclone copy -P hz-jump:hz-jump/${PROGRAM_FILE} ~
        fi
        sudo tar zxvf ~/${PROGRAM_FILE} -C ${PROGRAM_DIR}
     fi

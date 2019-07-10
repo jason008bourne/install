@@ -22,7 +22,8 @@ if [ ! -d "${PROGRAM_DIR}" ]; then
    sudo mkdir -p "${PROGRAM_DIR}"
    #如果文件已经存在，解压
    if [ ! -f ~/${PROGRAM_FILE} ]; then
-   	  wget -c -P ~ ${DOWN_URL}
+   	  #wget -c -P ~ ${DOWN_URL}
+	  rclone copy -P hz-jump:hz-jump/${PROGRAM_FILE} ~
    fi
    sudo tar zxvf ~/${PROGRAM_FILE} -C ${PROGRAM_DIR}
 fi
