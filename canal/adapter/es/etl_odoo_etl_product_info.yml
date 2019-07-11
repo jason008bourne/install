@@ -6,7 +6,7 @@ esMapping:
   _type: _doc
   _id: product_no
   upsert: true
-#  pk: id
+  pk: id
   sql: "SELECT product_no,new_first_category_id,new_second_category_id,new_third_category_id,product_level,product_source,level_status,supplier_is_fixed,is_purchased,history_score_sequence,product_create_time,sales_number,last_week_sales,history_sales,last_week_rating_num,IF(last_week_score = '', null, last_week_score) as last_week_score,history_rating_num,IF(history_average_score = '', null, history_average_score) as history_average_score,is_fixed,fixed_type,IF(sale_price = '', null,sale_price) as sale_price FROM etl_product_info"
   skips:
     - product_no

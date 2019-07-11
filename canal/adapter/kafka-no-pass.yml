@@ -17,13 +17,6 @@ canal.conf:
   timeout:
   accessKey: 
   secretKey: 
-  kafka:
-    security:
-      protocol: SASL_PLAINTEXT
-    sasl:
-      mechanism: PLAIN
-      jaas:
-          config: org.apache.kafka.common.security.plain.PlainLoginModule required username="bob" password="bob-pwd";
   srcDataSources:
     etl_odoo:
       url: jdbc:mysql://172.16.254.40:3306/etl_odoo?autoReconnect=true

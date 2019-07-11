@@ -2,15 +2,33 @@ SHELL_FOLDER=$(dirname $(readlink -f "$0"))
 echo "${SHELL_FOLDER}"
 cd ${SHELL_FOLDER}/bin
 runModel=${1}
+adapterNum=${2}
 
-if [[ -z "${runModel}" ]] || [[ "${runModel}" == "1" ]]; then 
-    bash canal-clean.sh
-    bash canal-adapter.sh 1
+ZK_ADDR="172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813"
+ADAPTER_MEMORY=1
+SERVER_MEMORY=1
+KAFKA_ADDR="172.16.254.29:9092"
+KAFKA_USER="bob"
+KAFKA_PASS="bob-pwd"
+
+if [ -z "${adapterNum}" ]; then
+    adapterNum=1
+fi
+if [[ -z "${runModel}" ]] || [[ "${runModel}" == "1" ]]; then
+	for((j=1;j<=${adapterNum};j++))
+	do
+        bash canal-adapter-clean.sh ${j}
+	done
+
+	for((j=1;j<=${adapterNum};j++))
+	do
+        bash canal-adapter.sh ${ZK_ADDR} ${ADAPTER_MEMORY} ${KAFKA_ADDR} ${KAFKA_USER} ${KAFKA_PASS} ${j}
+	done
 fi
 
 if [[ "${runModel}" == "1" ]] || [[ "${runModel}" == "2" ]]; then 
-    bash canal-clean.sh 2
-    bash canal.sh 172.16.254.29:21811,172.16.254.29:21812,172.16.254.29:21813 1 172.16.254.29:9092 bob bob-pwd
+    bash canal-clean.sh
+    bash canal.sh ${ZK_ADDR} ${SERVER_MEMORY} ${KAFKA_ADDR} ${KAFKA_USER} ${KAFKA_PASS}
 fi
 
 
