@@ -11,10 +11,15 @@ KAFKA_ADDR="172.16.254.29:9092"
 KAFKA_USER="bob"
 KAFKA_PASS="bob-pwd"
 
+if [ -z "${runModel}" ]; then
+    runModel="1"
+fi
+
 if [ -z "${adapterNum}" ]; then
     adapterNum=1
 fi
-if [[ -z "${runModel}" ]] || [[ "${runModel}" == "1" ]]; then
+
+if [[ "${runModel}" == "1" ]] || [[ "${runModel}" == "3" ]]; then
 	for((j=1;j<=${adapterNum};j++))
 	do
         bash canal-adapter-clean.sh ${j}
@@ -26,7 +31,7 @@ if [[ -z "${runModel}" ]] || [[ "${runModel}" == "1" ]]; then
 	done
 fi
 
-if [[ "${runModel}" == "1" ]] || [[ "${runModel}" == "2" ]]; then 
+if [[ "${runModel}" == "2" ]] || [[ "${runModel}" == "3" ]]; then
     bash canal-clean.sh
     bash canal.sh ${ZK_ADDR} ${SERVER_MEMORY} ${KAFKA_ADDR} ${KAFKA_USER} ${KAFKA_PASS}
 fi
