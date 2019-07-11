@@ -49,6 +49,7 @@ if [ -z "${KAFKA_USER}" ]; then
 fi
 
 sudo sed -ri "s/port.*/port: 808${INSTANCE_ID}/" ${YAML_FILE}
+sudo sed -ri "s/zookeeperHosts.*/zookeeperHosts: ${ZK_ADDR}/" ${YAML_FILE}
 
 if [ -z "${KAFKA_ADDR}" ]; then
     sudo sed -ri "s/mode.*/mode: tcp/" ${YAML_FILE}
