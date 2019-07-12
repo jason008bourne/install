@@ -7,7 +7,8 @@ esMapping:
   _id: product_no
   upsert: true
   pk: id
-  sql: "SELECT id as pid,product_no,active as state,image_url as img_url,list_price,daily_testing_flag FROM product_template"
+  sql: "SELECT id as pid,product_no,active as state,image_url as img_url,daily_testing_flag FROM product_template"
+  #sql: "SELECT id as pid,product_no,active as state,image_url as img_url,list_price,daily_testing_flag FROM product_template"  
   skips:
     - product_no
   etlCondition: "where id >= '{0}'"

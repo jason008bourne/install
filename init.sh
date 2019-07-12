@@ -36,6 +36,13 @@ if [[ "${runModel}" == "2" ]] || [[ "${runModel}" == "3" ]]; then
     bash canal.sh ${ZK_ADDR} ${SERVER_MEMORY} ${KAFKA_ADDR} ${KAFKA_USER} ${KAFKA_PASS}
 fi
 
+if [[ "${runModel}" == "4" ]]; then
+    bash canal-clean.sh
+	for((j=1;j<=${adapterNum};j++))
+	do
+        bash canal-adapter-clean.sh ${j}
+	done
+fi
 
 #canal部署
 #1.修改配置文件的mysql连接信息和用户名密码,canal默认取内网ip，端口21111,看是否需要调整,
